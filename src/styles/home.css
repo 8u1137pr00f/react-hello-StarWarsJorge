@@ -13,16 +13,21 @@ body {
 .container {
     background-color: rgba(255, 255, 255, 0.4); /* Fondo blanco translúcido para el contenido */
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px;
 }
 
 .custom-carousel-control {
 	background-color: rgba(255, 255, 255, 0.5); /* Fondo traslúcido de color blanco */
 	border: 1px solid red; /* Borde rojo */
     height: 60px;
-    width: 25px;
+    width: 22px;
 }
 
 .custom-carousel-icon {
 	filter: invert(1) sepia(1) saturate(5) hue-rotate(340deg); /* Convierte el icono en rojo */
+}
+
+footer {
+    background-color: brown;
+    text-align: center;
 }

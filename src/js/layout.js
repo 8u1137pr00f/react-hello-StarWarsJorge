@@ -32,7 +32,11 @@ const Layout = () => {
 						<Route path="/planets/:id" element={<PlanetsDetails />} />
 						<Route path="*" element={<h1>Not found!</h1>} />
 					</Routes>
-					
+					<footer className="footer mt-auto py-3 text-center">
+						<span>
+							Made by <strong>Jorge Astorga</strong>. May the force be with you.
+						</span>
+					</footer>	
 				</ScrollToTop>
 			</BrowserRouter>
 		</div>
