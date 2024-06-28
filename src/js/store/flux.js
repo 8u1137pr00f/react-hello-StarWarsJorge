@@ -2,50 +2,83 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             characters: [],
+            validCharacters: [],
             characterDetails: [],
             vehicles: [],
+            validVehicles: [],
             vehiclesDetails: [],
             planets: [],
+            validPlanets: [],
             planetsDetails: [],
-            favorites: []
+            favorites: [],
+            invalidImages: []
         },
 
         actions: {
-            getCharacters : async() => {
-                const res = await fetch(`https://www.swapi.tech/api/people/`)
-                const data = await res.json()
-                setStore({characters: data.results})
+            getCharacters: async () => {
+                const res = await fetch(`https://www.swapi.tech/api/people/`);
+                const data = await res.json();
+                const validChars = await Promise.all(
+                    data.results.map(async (item) => {
+                        const isValid = await getActions().checkImageURL(`https://starwars-visualguide.com/assets/img/characters/${item.uid}.jpg`);
+                        return isValid ? item : null;
+                    })
+                );
+                setStore({ characters: data.results, validCharacters: validChars.filter(Boolean) });
             },
-            getCharactersDetails: async(id) => {
-                const result = await fetch(`https://www.swapi.tech/api/people/${id}`)
-                const data = await result.json()
-                console.log(data.result.properties);
-                setStore({characterDetails: data.result.properties})
+            getCharactersDetails: async (id) => {
+                const result = await fetch(`https://www.swapi.tech/api/people/${id}`);
+                const data = await result.json();
+                setStore({ characterDetails: data.result.properties });
             },
-            getVehicles : async() => {
-                const res = await fetch(`https://www.swapi.tech/api/vehicles/`)
-                const data = await res.json()
-                setStore({vehicles: data.results})
+            getVehicles: async () => {
+                const res = await fetch(`https://www.swapi.tech/api/vehicles/`);
+                const data = await res.json();
+                const validVehs = await Promise.all(
+                    data.results.map(async (item) => {
+                        const isValid = await getActions().checkImageURL(`https://starwars-visualguide.com/assets/img/vehicles/${item.uid}.jpg`);
+                        return isValid ? item : null;
+                    })
+                );
+                setStore({ vehicles: data.results, validVehicles: validVehs.filter(Boolean) });
             },
-            getVehiclesDetails: async(id) => {
-                const result = await fetch(`https://www.swapi.tech/api/vehicles/${id}`)
-                const data = await result.json()
-                console.log(data.result.properties);
-                setStore({vehiclesDetails: data.result.properties})
+            getVehiclesDetails: async (id) => {
+                const result = await fetch(`https://www.swapi.tech/api/vehicles/${id}`);
+                const data = await result.json();
+                setStore({ vehiclesDetails: data.result.properties });
             },
-            getPlanets : async() => {
-                const res = await fetch(`https://www.swapi.tech/api/planets/`)
-                const data = await res.json()
-                setStore({planets: data.results})
+            getPlanets: async () => {
+                const res = await fetch(`https://www.swapi.tech/api/planets/`);
+                const data = await res.json();
+                const validPlts = await Promise.all(
+                    data.results.map(async (item) => {
+                        // Si la imagen es 1.jpg y está marcada como inválida, retornamos null
+                        if (item.uid === "1" && getStore().invalidImages.includes("1")) return null;
+                        const isValid = await getActions().checkImageURL(`https://starwars-visualguide.com/assets/img/planets/${item.uid}.jpg`);
+                        return isValid ? item : null;
+                    })
+                );
+                setStore({ planets: data.results, validPlanets: validPlts.filter(Boolean) });
             },
-            getPlanetsDetails: async(id) => {
-                const result = await fetch(`https://www.swapi.tech/api/planets/${id}`)
-                const data = await result.json()
-                console.log(data.result.properties);
-                setStore({planetsDetails: data.result.properties})
+            getPlanetsDetails: async (id) => {
+                const result = await fetch(`https://www.swapi.tech/api/planets/${id}`);
+                const data = await result.json();
+                setStore({ planetsDetails: data.result.properties });
             },
-
-            //a partir de aquí es para manejar los favoritos
+            checkImageURL: async (url) => {
+                try {
+                    const response = await fetch(url);
+                    if (response.status === 404 && url.includes("1.jpg")) {
+                        // Si la imagen es 1.jpg y da 404, la añadimos a la lista de imágenes inválidas
+                        const invalidImages = getStore().invalidImages;
+                        setStore({ invalidImages: [...invalidImages, "1"] });
+                    }
+                    return response.ok;
+                } catch (error) {
+                    console.error(`Error fetching image from ${url}:`, error);
+                    return false;
+                }
+            },
             toggleFavorite: (item) => {
                 const store = getStore();
                 const favorites = store.favorites;

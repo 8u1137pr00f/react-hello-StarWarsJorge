@@ -10,7 +10,7 @@ export const VehiclesDetails = () => {
 
 	useEffect(() => {
 		actions.getVehiclesDetails(id);
-	}, []);
+	}, [actions, id]); // Solo ejecuta una vez al cambiar el id
 
 	return (
 		<div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
@@ -25,11 +25,10 @@ export const VehiclesDetails = () => {
 					<p className="card-text">Cargo capacity: {store.vehiclesDetails.cargo_capacity} kg</p>
 					<p className="card-text">Essential crew: {store.vehiclesDetails.crew}</p>
 					<p className="card-text">Passenger capacity: {store.vehiclesDetails.passengers}</p>
-					<p className="card-text">Time of consumable support without resuply: {store.vehiclesDetails.consumables} months</p>
+					<p className="card-text">Time of consumable support without resupply: {store.vehiclesDetails.consumables} months</p>
 					<Link to="/" className="btn btn-dark">Return to garage</Link>
 				</div>
 			</div>
 		</div>
 	);
 };
-

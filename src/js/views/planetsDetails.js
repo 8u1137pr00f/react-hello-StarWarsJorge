@@ -10,7 +10,20 @@ export const PlanetsDetails = () => {
 
 	useEffect(() => {
 		actions.getPlanetsDetails(id);
-	}, []);
+	}, [actions, id]); // Solo ejecuta una vez al cambiar el id
+
+	if (id === "1" && store.invalidImages.includes("1")) {
+		return (
+			<div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+				<div className="card text-center" style={{ width: "18rem" }}>
+					<div className="card-body">
+						<p className="card-text">Image for this planet is not available.</p>
+						<Link to="/" className="btn btn-dark">Return to galaxy</Link>
+					</div>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
