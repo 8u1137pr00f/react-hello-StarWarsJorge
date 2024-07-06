@@ -10,7 +10,7 @@ export const Home = () => {
         actions.getCharacters();
         actions.getVehicles();
         actions.getPlanets();
-    }, [actions]); // Solo ejecuta una vez al montar el componente
+    }, []);
 
     const createCarouselItems = (items, type) => {
         const slides = [];

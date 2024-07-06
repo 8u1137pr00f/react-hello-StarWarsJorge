@@ -10,7 +10,7 @@ export const PlanetsDetails = () => {
 
 	useEffect(() => {
 		actions.getPlanetsDetails(id);
-	}, [actions, id]); // Solo ejecuta una vez al cambiar el id
+	}, [id]);
 
 	if (id === "1" && store.invalidImages.includes("1")) {
 		return (

@@ -52,7 +52,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 const data = await res.json();
                 const validPlts = await Promise.all(
                     data.results.map(async (item) => {
-                        // Si la imagen es 1.jpg y está marcada como inválida, retornamos null
+                        // Si la imagen es 1.jpg y está marcada como no válida, retornamos null
                         if (item.uid === "1" && getStore().invalidImages.includes("1")) return null;
                         const isValid = await getActions().checkImageURL(`https://starwars-visualguide.com/assets/img/planets/${item.uid}.jpg`);
                         return isValid ? item : null;
@@ -69,7 +69,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 try {
                     const response = await fetch(url);
                     if (response.status === 404 && url.includes("1.jpg")) {
-                        // Si la imagen es 1.jpg y da 404, la añadimos a la lista de imágenes inválidas
+                        // Si la imagen es 1.jpg y da 404, la añadimos a la lista de imágenes no válidas
                         const invalidImages = getStore().invalidImages;
                         setStore({ invalidImages: [...invalidImages, "1"] });
                     }

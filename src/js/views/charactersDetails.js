@@ -10,7 +10,7 @@ export const CharactersDetails = () => {
 
 	useEffect(() => {
 		actions.getCharactersDetails(id);
-	}, [actions, id]); // Solo ejecuta una vez al cambiar el id
+	}, [id]);
 
 	return (
 		<div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
